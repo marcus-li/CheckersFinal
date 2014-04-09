@@ -1,31 +1,4 @@
-// RmCheckersClient.java is a client that interacts with Sam, a checkers 
-// server. It is designed to illustrate how to communicate with the server
-// in a minimal way.  It is not meant to be beautiful java code.
-// Given the correct machine name and port for the server, a user id, and a 
-// password (_machine, _port, _user, and _password in the code), running 
-// this program will initiate connection and start a game with the default 
-// player. (the _machine and _port values used should be correct, but check
-// the protocol document.)
-// 
-// the program has been tested and used under Java 5.0 and 6.0, but probably 
-// would work under older or newer versions.
-//
-// Copyright (C) 2008 Robert McCartney
- 
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License as
-// published by the Free Software Foundation; either version 2 of the
-// License, or (at your option) any later version.
 
-// This program is distributed in the hope that it will be useful, but
-// WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// General Public License for more details.
-
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-// USA
 
 import java.io.*;
 import java.net.*;
