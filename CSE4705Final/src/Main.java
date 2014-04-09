@@ -1,12 +1,26 @@
-public class Main{
-	public static void main(String[] args){
-		System.out.println("sdfsdfs");
-		System.out.println(":)");
-		System.out.println("second commit test");
-		System.out.println("Third commit test");
+
+
+public class Main
+	{
+		public static void main(String[] args)
+		{
+			System.out.println("sdfsdfs");
+			System.out.println(":)");
+		//sdgsdgsg
+			
+		}
+		
+		
+		//quick print function
+		public void print(String s)
+			{
+				System.out.println(s);
+			}
 	}
-}
-	
+
+//icarus2.engr.uconn.edu
+//port 3499.
+
 
 /*
  * 1 = (1:7)
