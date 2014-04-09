@@ -2,11 +2,22 @@
 
 public class Main
 	{
+		
+		public Main()
+			{
+				connectToServer();
+				
+			}
+		private void connectToServer()
+			{
+				// TODO Auto-generated method stub
+				
+			}
 		public static void main(String[] args)
 		{
-			System.out.println("sdfsdfs");
+			
 			System.out.println(":)");
-		//sdgsdgsg
+			new Main();
 			
 		}
 		
