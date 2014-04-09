@@ -31,22 +31,26 @@ public class CheckersClient {
 		{
 			String readMessage;
 			try{
-			    readAndEcho(); // start message
-			    readAndEcho(); // ID query
+				
+				
+			    readAndEcho(); // SAMv1.0
+			    readAndEcho(); // ?Username
 			    String user = _sc.nextLine();
-			    writeMessageAndEcho(user); // user ID
+			    writeMessageAndEcho(user); //send username to server
 			    
-			    readAndEcho(); // password query 
+			    readAndEcho(); // ?Password
 			    String pass = _sc.nextLine();
-			    writeMessage(pass);  // password
+			    writeMessage(pass);  // send password to server
 
-			    readAndEcho(); // opponent query
+			    readAndEcho(); // ?Opponent
+			    System.out.println("( server opponent = 0 )");
+			    String opponent = _sc.nextLine();
+			    writeMessageAndEcho(opponent);  // opponent
+
+			    _gameID = readAndEcho().substring(5,9); // game 
+			    _myColor = readAndEcho().substring(6,11);  // color
 			    
-			    writeMessageAndEcho(_opponent);  // opponent
-
-			    setGameID(readAndEcho().substring(5,9)); // game 
-			    setColor(readAndEcho().substring(6,11));  // color
-			    System.out.println("I am playing as "+getColor()+ " in game number "+ getGameID());
+			    System.out.println("I am playing as "+ _myColor + " in game number "+ _gameID);
 			    readMessage = readAndEcho();  
 			    String response;
 			    while(true)
@@ -76,35 +80,38 @@ public class CheckersClient {
 		}
 
 
-
-	public static void main(String[] argv){
-	String readMessage;
-	CheckersClient myClient = new CheckersClient();
+    //initiate new client
+	public static void main(String[] argv){new CheckersClient();}
 	
-    }
-
+	
+	//read a message from the server and return it as a string
     public String readAndEcho() throws IOException
     {
-	String readMessage = _in.readLine();
-	System.out.println("read: "+readMessage);
-	return readMessage;
+		String readMessage = _in.readLine();
+		System.out.println("read: "+readMessage);
+		return readMessage;
     }
 
+    
+    //send a message to the server
     public void writeMessage(String message) throws IOException
     {
-	_out.print(message+"\r\n");  
-	_out.flush();
+		_out.print(message+"\r\n");  
+		_out.flush();
     }
  
+    //send a message to the server, but also print back to the console
     public void writeMessageAndEcho(String message) throws IOException
     {
-	_out.print(message+"\r\n");  
-	_out.flush();
-	System.out.println("sent: "+ message);
+		_out.print(message+"\r\n");  
+		_out.flush();
+		System.out.println("sent: "+ message);
     }
-			       
+			     
+    
+    
+    //Initiate a tcp connection with the server
     public  Socket openSocket(){
-	//Create socket connection, adapted from Sun example
 	try{
        _socket = new Socket(_machine, _port);
        _out = new PrintWriter(_socket.getOutputStream(), true);
@@ -118,37 +125,5 @@ public class CheckersClient {
      }
      return _socket;
   }
-    
-    
-    
-    
-    
-    
-    public Socket getSocket(){
-    	return _socket;
-        }
 
-        public PrintWriter getOut(){
-    	return _out;
-        }
-
-        public BufferedReader getIn(){
-    	return _in;
-        }
-         
-        public void setGameID(String id){
-    	_gameID = id;
-        }
-        
-        public String getGameID() {
-    	return _gameID;
-        }
-
-        public void setColor(String color){
-    	_myColor = color;
-        }
-        
-        public String getColor() {
-    	return _myColor;
-        }
 }
