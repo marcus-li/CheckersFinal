@@ -5,5 +5,6 @@ public class Main
 		{
 			System.out.println("sdfsdfs");
 			System.out.println(":)");
+			System.out.println("second commit test");
 		}
 	}
