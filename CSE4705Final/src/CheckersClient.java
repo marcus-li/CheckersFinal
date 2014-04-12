@@ -24,13 +24,12 @@ public class CheckersClient {
 	private int[] _pieces = new int[36];
   
     public CheckersClient(){
-    		initializePieces();
+    		
     		_GUI = new CheckersFrame();
     		_GUI.updatePieces(_pieces);
-    		
-    			setupCredentials();
-    			_socket = openSocket();
-    			connectToServer();
+    		setupCredentials();
+    		_socket = openSocket();
+    		connectToServer();
     			
 
     }
@@ -96,8 +95,8 @@ public class CheckersClient {
 
     //initiate new client
 	public static void main(String[] argv){
-		new CheckersClient();
 		Translate.initialize();//initialize our translation function
+		new CheckersClient();	
 		}
 	
 	
@@ -190,6 +189,7 @@ public class CheckersClient {
     	{
     		System.out.println(s);
     	}
+    
 
 
 }
