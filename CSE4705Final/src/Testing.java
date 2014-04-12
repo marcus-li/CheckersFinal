@@ -12,12 +12,9 @@ public class Testing
 			{
 				startTime = System.nanoTime();
 			}
-		public static void end()
+		public static void endAndReport()
 			{
 				endTime = System.nanoTime();
-			}
-		public static void reportTime()
-			{
 				System.out.println("time to completion: " + (endTime-startTime) + "ns");
 			}
 		
