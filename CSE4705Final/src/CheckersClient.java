@@ -1,13 +1,15 @@
 
 
+import gui.CheckersFrame;
+
 import java.io.*;
 import java.net.*;
 import java.util.Scanner;
 
 public class CheckersClient {
 
-    private final static String _user = "5";  // need legit id here
-    private final static String _password = "238056";  // need password here
+    private String _user = "5";
+    private String _password = "238056";  
     private final static String _opponent = "0";
     private final String _machine  = "icarus2.engr.uconn.edu"; 
     private int _port = 3499;
@@ -17,40 +19,50 @@ public class CheckersClient {
     private Scanner _sc = new Scanner(System.in);
     private String _gameID;
     private String _myColor;
-  
-    public CheckersClient(){	
-	_socket = openSocket();
+	private CheckersFrame _GUI;
 	
-	connectToServer();
+	private int[] _pieces = new int[36];
+  
+    public CheckersClient(){
+    		initializePieces();
+    		_GUI = new CheckersFrame();
+    		_GUI.updatePieces(_pieces);
+    		
+    			setupCredentials();
+    			_socket = openSocket();
+    			connectToServer();
+    			
 
     }
 
  
 
-    private void connectToServer()
+	
+
+
+
+
+
+	private void connectToServer()
 		{
 			String readMessage;
 			try{
 				
-				
-			    readAndEcho(); // SAMv1.0
-			    readAndEcho(); // ?Username
-			    String user = _sc.nextLine();
-			    writeMessageAndEcho(user); //send username to server
-			    
-			    readAndEcho(); // ?Password
-			    String pass = _sc.nextLine();
-			    writeMessage(pass);  // send password to server
-
-			    readAndEcho(); // ?Opponent
-			    System.out.println("( server opponent = 0 )");
+			    readAndEcho();				// SAMv1.0
+			    readAndEcho();				// ?Username
+			    writeMessageAndEcho(_user); //send username to server
+			    readAndEcho(); 				// ?Password
+			    writeMessageAndEcho(_password);  	// send password to server
+			    readAndEcho(); 				// ?Opponent
+			    System.out.println("\tserver opponent = 0");
 			    String opponent = _sc.nextLine();
 			    writeMessageAndEcho(opponent);  // opponent
-
 			    _gameID = readAndEcho().substring(5,9); // game 
 			    _myColor = readAndEcho().substring(6,11);  // color
 			    
 			    System.out.println("I am playing as "+ _myColor + " in game number "+ _gameID);
+			    
+			    //===============End Game Setup=================
 			    readMessage = readAndEcho();  
 			    String response;
 			    while(true)
@@ -78,10 +90,15 @@ public class CheckersClient {
 			}
 			
 		}
+    
+    
 
 
     //initiate new client
-	public static void main(String[] argv){new CheckersClient();}
+	public static void main(String[] argv){
+		new CheckersClient();
+		Translate.initialize();//initialize our translation function
+		}
 	
 	
 	//read a message from the server and return it as a string
@@ -125,5 +142,54 @@ public class CheckersClient {
      }
      return _socket;
   }
+    
+    //choose which user to connect with
+    private void setupCredentials()
+		{
+			System.out.println("User 1: 5, Pass: 238056\nUser2: 6, Pass: 993592");
+	    	System.out.println("Connect as User 1 or User 2? (Enter 1 or 2)");
+	    	if(_sc.nextLine().equals("2"))
+	    		{
+	    			_user = "6";
+	    			_password = "993592";
+	    		}
+	    	else
+	    		{
+	    			System.out.println("connecting with default credentials");
+	    		}
+		}
+    
+    private void initializePieces()
+		{
+			//black pieces
+			for(int i = 1 ; i <=8;i++ )
+				{
+					_pieces[i]=-1;
+				}
+			
+			_pieces[10]=-1;
+			_pieces[11]=-1;
+			_pieces[12]=-1;
+			_pieces[13]=-1;
+			
+			//white pieces
+			for(int i = 28 ; i <=35;i++ )
+				{
+					_pieces[i]=1;
+				}
+			
+			_pieces[26]=1;
+			_pieces[25]=1;
+			_pieces[24]=1;
+			_pieces[23]=1;
+			
+		}
+    
+    //simple print function
+    public static void print(String s)
+    	{
+    		System.out.println(s);
+    	}
+
 
 }
