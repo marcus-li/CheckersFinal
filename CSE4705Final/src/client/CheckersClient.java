@@ -31,23 +31,33 @@ public class CheckersClient {
     		for(int i= 0;i<_pieces.length;i++)
     			System.out.print(_pieces[i]);
     		print("");
-//    		_pieces = new int[] {0,
-//        			  0 ,   0 ,   0 ,   0
-//        		  ,0  ,   0 ,   0 , -1        ,0//9
-//        		  ,  1, 0 ,  1 , 0
-//        		  ,0  ,-2  ,0 , 0        ,0//18
-//        		  ,  0,  2 , 1 , 0
-//        		  ,0 , 0 , 0  ,0        ,0 //27
-//        		  ,  0 , 0 , 2 , 0
-//        		  ,0 , 0 , 2 , 0
-//        			};
+    	
+    		_pieces = new int[] {0,
+        			  0 ,   0 ,   0 ,   0
+        		  ,0  ,   -0 ,   0 , 0       ,0//9
+        		  ,  0, 0 ,  1 , 0
+        		  ,0  ,-1  ,0 , 0        ,0//18
+        		  ,  0,  1 , 1 , 0
+        		  ,0 , 0 , 0  ,0        ,0 //27
+        		  ,  0 , 0 , 2 , 0
+        		  ,0 , 0 , 2 , 0
+        			};
     		long[] map = Translate.arrayToBitMapping(_pieces);
 			long whites  = map[0];
 			long blacks = map[1];
 			long kings = map[2];	 
 			Testing.start();
-    		int[][] legalMoves = MoveGenerator.legalMoves(blacks, whites, kings,"black");
+    		int[][] legalMoves = MoveGenerator.legalMoves(blacks, whites, kings,"white");
     		Testing.endAndReport();
+    		
+    		_pieces = MoveGenerator.result("white", legalMoves[0], _pieces);
+    		for(int i= 0;i<_pieces.length;i++)
+    			System.out.print(_pieces[i]);
+    		print("");
+    		
+    		
+    		
+    		
     		int i=0;
     		
     		while(legalMoves[i]!=null)
@@ -91,53 +101,6 @@ public class CheckersClient {
     }
 
  
-
-	
-
-
-
-
-
-	private void updatePieces(String player, int[] nextMove)
-		{
-			int lastPosition = nextMove[0];
-			
-			int inc = 1;
-			while(nextMove[inc]!=0)
-				{
-					if(nextMove[inc]-lastPosition==8)
-						{
-							_pieces[nextMove[inc]-4] = 0;
-						}
-					else if(nextMove[inc]-lastPosition==-8)
-						{
-							_pieces[nextMove[inc]+4] = 0;
-						}
-					else if(nextMove[inc]-lastPosition==10)
-						{
-							_pieces[nextMove[inc]-5] = 0;
-						}
-					else if(nextMove[inc]-lastPosition==-10)
-						{
-							_pieces[nextMove[inc]+5] = 0;
-						}
-					lastPosition = nextMove[inc];
-					inc++;
-					
-				}
-			_pieces[nextMove[inc-1]]=_pieces[nextMove[0]];
-			_pieces[nextMove[0]]=0;
-			
-		}
-
-
-
-
-
-
-
-
-
 	private void connectToServer()
 		{
 			String readMessage;

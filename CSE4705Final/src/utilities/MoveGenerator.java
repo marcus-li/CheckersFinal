@@ -18,7 +18,81 @@ public class MoveGenerator
 	private MoveGenerator()
 		{/*private constructor, this is a utility, it is not to be instantiated.*/}
 				
-
+	//return a new array of pieces given a player, move, and board
+	public static int[] result(String player, int[] move, int[] board)
+		{
+			int[] newBoard = new int[36];
+			System.arraycopy(board, 0, newBoard, 0, 36);
+			if(player.equals("black"))
+				{
+					//length of 2 means regular move, length of 18 means jump move
+					if(move.length==2)
+						{
+							newBoard[move[1]]=newBoard[move[0]];//move old piece to new piece
+							newBoard[move[0]]=0;				//clear old piece
+							if(move[1]==32 || move[1] ==33||move[1]==34||move[1]==35)
+								{
+									newBoard[move[1]]=-2;//change to king
+								}
+						}
+					else
+						{
+							int inc = 2; //[0,2,4,...,10] the array ends on an even piece
+							
+							//go through the even pieces
+							while(!(move[inc]==0))
+								{
+									newBoard[move[inc-1]] = 0; //1,3,5...
+									inc=inc+2;
+								}
+							newBoard[move[inc-2]]=newBoard[move[0]];//move old piece to new piece
+							newBoard[move[0]]=0;
+							
+							if(move[inc-2]==32 || move[inc-2] ==33||move[inc-2]==34||move[inc-2]==35)
+								{
+									newBoard[move[inc-2]]=-2;//change to king
+								}
+						}
+				}
+			else
+				{
+					//length of 2 means regular move, length of 18 means jump move
+					if(move.length==2)
+						{
+							newBoard[move[1]]=newBoard[move[0]];//move old piece to new piece
+							newBoard[move[0]]=0;				//clear old piece
+							if(move[1]==1 || move[1] ==2||move[1]==3||move[1]==4)
+								{
+									newBoard[move[1]]=-2;//change to king (for whites)
+								}
+						}
+					else
+						{
+							int inc = 2; //[0,2,4,...,10] the array ends on an even piece
+							
+							//go through the even pieces
+							while(!(move[inc]==0))
+								{
+									newBoard[move[inc-1]] = 0; //1,3,5...
+									inc=inc+2;
+								}
+							newBoard[move[inc-2]]=newBoard[move[0]];//move old piece to new piece
+							newBoard[move[0]]=0;
+							
+							if(move[inc-2]==1 || move[inc-2] ==2||move[inc-2]==3||move[inc-2]==4)
+								{
+									newBoard[move[inc-2]]=-2;//change to king (for whites)
+								}
+						}
+				}
+			return newBoard;
+		}
+	
+	
+	
+	
+	
+	
 	//in testing 250,000 games, I didn't find more than 21 moves ever available so we will use an int[21][?] 
 	//We have two types of moves distinguished by the size of the array.
 	//an array of size 2 means a regular move, whereas an array of size 18 means jump move
