@@ -1,10 +1,13 @@
+package client;
 
-
+import utilities.*;
 import gui.CheckersFrame;
-
 import java.io.*;
 import java.net.*;
 import java.util.Scanner;
+
+import utilities.MoveEvaluator;
+import utilities.Translate;
 
 public class CheckersClient {
 
@@ -21,10 +24,65 @@ public class CheckersClient {
     private String _myColor;
 	private CheckersFrame _GUI;
 	
-	private int[] _pieces = new int[36];
+	private int[] _pieces = new int[36];//black -1,-2 white +1, +2 (2 are kings)
+	
+	
   
-    public CheckersClient(){
+    public CheckersClient(){ 	
+    		initializePieces();
+    		for(int i= 0;i<_pieces.length;i++)
+    			System.out.print(_pieces[i]);
+    		print("");
+    		_pieces = new int[] {0,
+        			  0 ,   0 ,   0 ,   0
+        		  ,0  ,   0 ,   0 , -1        ,0//9
+        		  ,  1, 0 ,  1 , 0
+        		  ,0  ,-2  ,0 , 0        ,0//18
+        		  ,  0,  2 , 1 , 0
+        		  ,0 , 0 , 0  ,0        ,0 //27
+        		  ,  0 , 0 , 2 , 0
+        		  ,0 , 0 , 2 , 0
+        			};
+    		long[] map = Translate.arrayToBitMapping(_pieces);
+			long whites  = map[0];
+			long blacks = map[1];
+			long kings = map[2];	 
+			Testing.start();
+    		int[][] legalMoves = MoveEvaluator.legalMoves(blacks, whites, kings,"black");
+    		Testing.endAndReport();
+    		int i=0;
     		
+    		while(legalMoves[i]!=null)
+    			{
+    				
+    				if(legalMoves[i].length==2)
+    					{
+    						System.out.println(legalMoves[i][0] + "->"+ legalMoves[i][1]);
+    					}
+    				else
+    					{
+    						int j = 0; 
+    						while(legalMoves[i][j]!=0)
+    							{
+    								System.out.print(" "+legalMoves[i][j]);
+    								j++;
+    							}
+    						System.out.println("");
+    					}
+    				
+    				i++;
+    			}
+    		
+    			// nextMove = new int[16];
+    			// nextMove[0] = 1;
+    			// nextMove[1] = 11;
+    			// nextMove[2] = 21;
+    			 
+    			 
+
+    			 
+    			 
+    		//updatePieces("black",nextMove);
     		_GUI = new CheckersFrame();
     		_GUI.updatePieces(_pieces);
     		setupCredentials();
@@ -37,6 +95,46 @@ public class CheckersClient {
  
 
 	
+
+
+
+
+
+	private void updatePieces(String player, int[] nextMove)
+		{
+			int lastPosition = nextMove[0];
+			
+			int inc = 1;
+			while(nextMove[inc]!=0)
+				{
+					if(nextMove[inc]-lastPosition==8)
+						{
+							_pieces[nextMove[inc]-4] = 0;
+						}
+					else if(nextMove[inc]-lastPosition==-8)
+						{
+							_pieces[nextMove[inc]+4] = 0;
+						}
+					else if(nextMove[inc]-lastPosition==10)
+						{
+							_pieces[nextMove[inc]-5] = 0;
+						}
+					else if(nextMove[inc]-lastPosition==-10)
+						{
+							_pieces[nextMove[inc]+5] = 0;
+						}
+					lastPosition = nextMove[inc];
+					inc++;
+					
+				}
+			_pieces[nextMove[inc-1]]=_pieces[nextMove[0]];
+			_pieces[nextMove[0]]=0;
+			
+		}
+
+
+
+
 
 
 
@@ -63,6 +161,7 @@ public class CheckersClient {
 			    
 			    //===============End Game Setup=================
 			    readMessage = readAndEcho();  
+			    
 			    String response;
 			    while(true)
 			    	{
@@ -84,6 +183,7 @@ public class CheckersClient {
 			   
 			    _socket.close();
 			} catch  (IOException e) {
+				
 			    System.out.println("Failed in read/close");
 			    System.exit(1);
 			}
@@ -145,7 +245,7 @@ public class CheckersClient {
     //choose which user to connect with
     private void setupCredentials()
 		{
-			System.out.println("User 1: 5, Pass: 238056\nUser2: 6, Pass: 993592");
+			System.out.println("User 1: 5, Pass: 238056\nUser 2: 6, Pass: 993592");
 	    	System.out.println("Connect as User 1 or User 2? (Enter 1 or 2)");
 	    	if(_sc.nextLine().equals("2"))
 	    		{

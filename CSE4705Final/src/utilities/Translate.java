@@ -1,3 +1,4 @@
+package utilities;
 import java.util.HashMap;
 
 
@@ -9,17 +10,35 @@ public class Translate {
 		//don't make instances of this class
 	}
 	
+	
+	
+	public static String  nativeMoveToServer(int[] steps)
+		{
+			String s="";
+			for(int i = 0 ; i < steps.length-1;i++)
+				{
+					s=s+ nativePositionToServer(steps[i])+":";
+				}
+			s=s+ nativePositionToServer(steps[steps.length-1]);
+			return s;
+		}
 
-	public static String nativeToServer(int e) 
+	public static String nativePositionToServer(int position) 
 	{
 		//assume this will be called with a valid index to save time. 
 		//If there is an error we will lose anyways.
-		return ntsTranslation[e];
+		return ntsTranslation[position];
 	}
 	
-	public static int serverToNative(String e) {
+	public static int[] serverMoveToNative(String e) {
 		//uses hashmap stnTranslation to convert server strings to our int representation
-		return stnTranslation.get(e);
+		String[] moves = e.split(":\\(");
+		int[] move = new int[moves.length];
+		move[0]=stnTranslation.get(moves[0]);
+		//we split by ":(" so need to reinsert "(" for our translation function
+		for(int i = 1 ;i <moves.length;i++)
+			move[i] = stnTranslation.get("("+moves[i]);	
+		return move;
 	}
 	
 	
@@ -112,6 +131,73 @@ public class Translate {
 			stnTranslation.put("(0:2)", 33);
 			stnTranslation.put("(0:4)", 34);
 			stnTranslation.put("(0:6)", 35);
+			
+		}
+	
+	
+	public static int[] bitMaskToIntArray(long whites, long blacks, long kings)
+	{
+		int[] pieces = new int[36];
+		for(int i = 1 ; i <36;i++)
+			{
+				if(((blacks&1)&(kings&1))==1)
+					{
+						pieces[i] = -2;
+					}
+				else if((blacks&1)==1)
+					{
+						pieces[i] = -1;
+					}
+				else if(((whites&1)&(kings&1))==1)
+					{
+						pieces[i] = 2;
+						
+					}
+				else if((whites&1)==1)
+					{
+						pieces[i] = 1;
+					}
+				
+				blacks = blacks>>1;
+				whites = whites>>1;
+				kings = kings>>1;
+			}
+		return pieces;
+	}
+
+
+
+	public static long[] arrayToBitMapping(int[] pieces)
+		{
+			//======convert to bit representation for fast evaluation
+			long kings = 0;
+			long whites = 0;
+			long blacks = 0;
+			for(int i = 35 ; i >0;i--)
+				{
+					kings = kings<<1; whites = whites<<1; blacks = blacks<<1;
+					if(pieces[i]==0)
+						{
+							continue;
+						}
+					else if(pieces[i]<0)
+						{
+							//black piece
+							blacks++;
+							if(pieces[i]==-2)
+								kings++;
+						}
+					else
+						{
+							//white piece
+							whites++;
+							if(pieces[i]==2)
+								kings++;
+						}	
+				}
+			return new long[]{whites,blacks,kings};
+			
+			
 			
 		}
 	
