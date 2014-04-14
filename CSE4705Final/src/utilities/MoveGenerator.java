@@ -3,7 +3,7 @@ package utilities;
 import java.util.LinkedList;
 
 
-public class MoveEvaluator
+public class MoveGenerator
 	{
 		private static final long invalidMask =              0b100000000100000000100000000L;//filter 8 17 and 26		
 		private static  long _blacks=0;//0b11111111011110000000000000000000000L
@@ -15,29 +15,9 @@ public class MoveEvaluator
 		private static int moveCount;
 
 		
-	private MoveEvaluator()
+	private MoveGenerator()
 		{/*private constructor, this is a utility, it is not to be instantiated.*/}
-		
-		
-	public static int[] getBestMove(int[] _pieces, String player)
-		{
-			_player = player;
-			
-			//convert our pieces so they can be bit manipulated
-			long[] map = Translate.arrayToBitMapping(_pieces);
-			long whites  = map[0];
-			long blacks = map[1];
-			long kings = map[2];
-			
-			//generate all possible moves
-			int[][] possibleMoves =  legalMoves(blacks,whites,kings,player);
-			
-			//find the best move from legal moves
-			int[] bestMove = evaluationFunction(possibleMoves);
-			return bestMove;//something like [1,6,11,7,3] would mean 1 moves to 11 (by jump) then moves to 3 (by jump)
-			
-		}
-		
+				
 
 	//in testing 250,000 games, I didn't find more than 21 moves ever available so we will use an int[21][?] 
 	//We have two types of moves distinguished by the size of the array.
@@ -454,12 +434,6 @@ public class MoveEvaluator
 				downRight = downRight>>1;
 			}
 			
-		}
-
-	private static int[] evaluationFunction(int[][] possibleMoves)
-		{
-			// TODO Auto-generated method stub
-			return null;
 		}
 	
 	}
