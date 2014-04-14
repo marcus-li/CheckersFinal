@@ -2,6 +2,7 @@ package gui;
 
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
@@ -9,7 +10,7 @@ import javax.swing.JPanel;
 
 public class GUIBoard extends JPanel
 	{
-		
+		int counter = 0;//for painting numbers
 		Ellipse2D.Double circle;
 		int _pieceSize=60;		
 		int _newSize = 8*_pieceSize;
@@ -21,6 +22,7 @@ public class GUIBoard extends JPanel
 				setVisible(true);
 				this.setSize(_newSize,_newSize);
 				this.setVisible(true);
+				setBackground(Color.BLACK);
 			}
 		
 		public void updatePieces(int[] pieces)
@@ -48,7 +50,7 @@ public class GUIBoard extends JPanel
 		        		   for (int y = 0 ; y < 8; y++)
 		        			   {
 		        				   if (Math.pow(-1,x+y)==1){
-						        		g.setColor(Color.DARK_GRAY);
+						        		g.setColor(Color.LIGHT_GRAY);
 						        		g.fillRect(x*_pieceSize, y*_pieceSize, _pieceSize, _pieceSize);
 						        	}   
 		        			   }
@@ -66,7 +68,7 @@ public class GUIBoard extends JPanel
 		
 		private void drawPieces(Graphics2D g)
 			{
-		         
+		         counter=1;
 	        			drawPiece(g,_pieces[1],0,1);
 	        			drawPiece(g,_pieces[2],0,3);
 	        			drawPiece(g,_pieces[3],0,5);
@@ -116,7 +118,7 @@ public class GUIBoard extends JPanel
 				if(type==-1) //black
     				{
     					g.setColor( new 
-		        				   Color(0,0,0));
+		        				   Color(180,180,180));
     					g.fillOval(x*_pieceSize,y*_pieceSize, _pieceSize, _pieceSize);
     					g.setColor( new 
 		        				   Color(50,50,50));
@@ -136,23 +138,29 @@ public class GUIBoard extends JPanel
     			else if(type==-2)//black king
     				{
     					g.setColor( new 
-		        				   Color(255,255,0));
-    					g.fillOval(x,y, _pieceSize, _pieceSize);
+		        				   Color(255,196,0));
+    					g.fillOval(x*_pieceSize,y*_pieceSize, _pieceSize, _pieceSize);
     					g.setColor( new 
 		        				   Color(50,50,50));
-    					g.fillOval(x+shift(0.8),y+shift(0.8), scaleDown(0.8), scaleDown(0.8));
+    					g.fillOval(x*_pieceSize+shift(0.8),y*_pieceSize+shift(0.8), scaleDown(0.8), scaleDown(0.8));
     					
     				}
     			else if(type==2)//white king
     				{
     					g.setColor( new 
-		        				   Color(255,255,0));
-    					g.fillOval(x,y, _pieceSize, _pieceSize);	
+		        				   Color(255,196,0));
+    					g.fillOval(x*_pieceSize,y*_pieceSize, _pieceSize, _pieceSize);	
     					g.setColor( new 
 		        				   Color(255,0,0));
-    					g.fillOval(x+shift(0.8),y+shift(0.8), scaleDown(0.8), scaleDown(0.8));
+    					g.fillOval(x*_pieceSize+shift(0.8),y*_pieceSize+shift(0.8), scaleDown(0.8), scaleDown(0.8));
     					
     				}
+				g.setColor(Color.WHITE);
+				g.setFont(new Font("arial",Font.BOLD,16));
+				g.drawString(counter+"", x*_pieceSize+_pieceSize/2-10, y*_pieceSize+_pieceSize/2+5);
+				counter++;
+				if(counter ==9 || counter ==18||counter ==27)
+					counter++;
     			
 			}
 		private int shift(double d)
