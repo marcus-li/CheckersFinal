@@ -63,7 +63,7 @@ public class MoveGenerator
 							newBoard[move[0]]=0;				//clear old piece
 							if(move[1]==1 || move[1] ==2||move[1]==3||move[1]==4)
 								{
-									newBoard[move[1]]=-2;//change to king (for whites)
+									newBoard[move[1]]=2;//change to king (for whites)
 								}
 						}
 					else
@@ -81,7 +81,7 @@ public class MoveGenerator
 							
 							if(move[inc-2]==1 || move[inc-2] ==2||move[inc-2]==3||move[inc-2]==4)
 								{
-									newBoard[move[inc-2]]=-2;//change to king (for whites)
+									newBoard[move[inc-2]]=2;//change to king (for whites)
 								}
 						}
 				}
@@ -106,7 +106,7 @@ public class MoveGenerator
 			_kings  = kings;
 			
 			//an array container for holding all possible moves represented as arrays
-			int[][] moveContainer = new int[21][];
+			int[][] moveContainer = new int[25][];
 
 			//we are passing a pointer to container which is being updated by jump and basic moves
 			//so these methods do not return anything, but do modify "moveContainer" which is returned
@@ -449,7 +449,7 @@ public class MoveGenerator
 	private static void basicMoves(long blacks, long whites, long kings,
 			int[][] container)
 		{
-			System.out.println("basicMoves called");
+			//System.out.println("basicMoves called");
 			//can't move to any positions corresponding to invalid positions
 			long invalidSpots = whites|blacks|invalidMask;
 			long downLeft ;

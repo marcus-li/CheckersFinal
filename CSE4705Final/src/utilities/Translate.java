@@ -195,7 +195,7 @@ public class Translate {
 								kings++;
 						}	
 				}
-			return new long[]{whites,blacks,kings};
+			return new long[]{blacks,whites,kings};
 			
 			
 			
