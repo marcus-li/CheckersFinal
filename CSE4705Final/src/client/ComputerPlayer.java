@@ -3,6 +3,7 @@ package client;
 import gui.CheckersFrame;
 import utilities.Evaluation;
 import utilities.MiniMax;
+import utilities.Testing;
 
 
 public class ComputerPlayer
@@ -18,7 +19,9 @@ public class ComputerPlayer
 		
 		public int[] getBestMove(int[] _pieces)
 			{	
+				
 				return MiniMax.minimaxDecision(_pieces, _eFunction, _color);
+				
 			}
 
 		public int getColor()
