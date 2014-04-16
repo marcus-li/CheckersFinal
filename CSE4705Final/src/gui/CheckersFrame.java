@@ -9,6 +9,7 @@ package gui;
 		public class CheckersFrame extends JFrame
 			{
 				GUIBoard _board;
+				private boolean _hasPieces=false;
 				
 				public CheckersFrame()
 					{
@@ -29,6 +30,13 @@ package gui;
 				public void updatePieces(int[] pieces)
 					{
 						_board.updatePieces(pieces);
+						_hasPieces = true;
+					}
+
+				public boolean hasPieces()
+					{
+						// TODO Auto-generated method stub
+						return _hasPieces;
 					}
 				
 

@@ -5,11 +5,11 @@ import java.util.LinkedList;
 
 public class MoveGenerator
 	{
-		private static final long invalidMask =              0b100000000100000000100000000L;//filter 8 17 and 26		
-		private static  long _blacks=0;//0b11111111011110000000000000000000000L
-		private static  long _whites=0;//0b00000000000000000000001111011111111L
+		private static final long invalidMask =  0b100000000100000000100000000L;//filter 8 17 and 26		
+		private static  long _blacks=0;//0b00000000000000000000001111011111111L
+		private static  long _whites=0;//0b11111111011110000000000000000000000L
 		private static  long _kings =0;//0b00000000000000000000000000000000000L
-		private static String _player;
+		private static int _player;
 		
 		//moveCount is a persistent count on the next free position in our moves array.
 		private static int moveCount;
@@ -19,11 +19,11 @@ public class MoveGenerator
 		{/*private constructor, this is a utility, it is not to be instantiated.*/}
 				
 	//return a new array of pieces given a player, move, and board
-	public static int[] result(String player, int[] move, int[] board)
+	public static int[] result(int player, int[] move, int[] board)
 		{
 			int[] newBoard = new int[36];
 			System.arraycopy(board, 0, newBoard, 0, 36);
-			if(player.equals("black"))
+			if(player==-1)
 				{
 					//length of 2 means regular move, length of 18 means jump move
 					if(move.length==2)
@@ -98,13 +98,13 @@ public class MoveGenerator
 	//an array of size 2 means a regular move, whereas an array of size 18 means jump move
 	//regular moves follow the syntax [start,end]
 	//jumps: [start, enemy, 1, enemy,2,enemy ...end] so we can also evaluate how many pieces were taken and where
-	public static int[][] legalMoves(long blacks, long whites, long kings, String player)
+	public static int[][] legalMoves(long blacks, long whites, long kings, int i)
 		{
-			_player = player;
+			_player = i;
 			_blacks = blacks;
 			_whites = whites;
 			_kings  = kings;
-			
+
 			//an array container for holding all possible moves represented as arrays
 			int[][] moveContainer = new int[25][];
 
@@ -129,7 +129,7 @@ public class MoveGenerator
 			long ul=0;
 			long ur=0;
 			
-			if(_player.equals("black"))
+			if(_player==-1)
 				{
 					//phase 1, enumerate opponent pieces in adjacent squares
 					dl = (blacks<<4)&whites; 	//down and left
@@ -150,7 +150,7 @@ public class MoveGenerator
 					ul = (ul&invalidspaces)^ul;
 					ur = (ur&invalidspaces)^ur;	
 				}
-			else if(_player.equals("white"))
+			else 
 				{	
 					//phase 1, check all opposing pieces in adjacent squares
 					k = whites&kings;
@@ -265,7 +265,7 @@ public class MoveGenerator
 			if((oldPosition&_kings)>>(currentMove[0]-1)==1)
 					newKings = (oldPosition^newKings) ^ newPosition;
 				
-			if(_player.equals("black"))
+			if(_player==-1)
 				{
 					newBlacks = (oldPosition^_blacks)^newPosition; 
 					newWhites = _whites^takenPieces; //if piece was taken remove it from new long
@@ -286,7 +286,7 @@ public class MoveGenerator
 			long invalidspaces = newWhites|newBlacks|invalidMask;
 			long ur=0,ul=0,k=0,dr = 0,dl=0; 
 			
-			if(_player.equals("black"))
+			if(_player==-1)
 				{
 					
 					//phase 1, enumerate opponent pieces in adjacent squares
@@ -297,7 +297,7 @@ public class MoveGenerator
 					ur = (k>>4)&newWhites;			
 		
 				}
-			else if(_player.equals("white"))
+			else 
 				{
 					
 					
@@ -456,7 +456,7 @@ public class MoveGenerator
 			long downRight ;
 			long upLeft ;
 			long upRight;
-			if(_player.equals("black"))
+			if(_player==-1)
 				{
 					 downLeft = blacks<<4;
 					 downRight = blacks<<5;

@@ -68,7 +68,7 @@ public class GUIBoard extends JPanel
 		
 		private void drawPieces(Graphics2D g)
 			{
-		         counter=1;
+		         		counter=1;
 	        			drawPiece(g,_pieces[1],0,1);
 	        			drawPiece(g,_pieces[2],0,3);
 	        			drawPiece(g,_pieces[3],0,5);

@@ -15,11 +15,23 @@ public class Translate {
 	public static String  nativeMoveToServer(int[] steps)
 		{
 			String s="";
-			for(int i = 0 ; i < steps.length-1;i++)
+			if(steps.length==2)
 				{
-					s=s+ nativePositionToServer(steps[i])+":";
+					s=s+nativePositionToServer(steps[0]) + ":" + nativePositionToServer(steps[1]);
+					
 				}
-			s=s+ nativePositionToServer(steps[steps.length-1]);
+			else{
+			int inc = 0;
+			while(steps[inc]!=0)
+				{
+					if(steps[inc+2]!=0)
+					s=s+ nativePositionToServer(steps[inc])+":";
+					else
+					s=s+nativePositionToServer(steps[inc]);
+					inc = inc+2;
+				}
+			
+			}
 			return s;
 		}
 
@@ -31,13 +43,34 @@ public class Translate {
 	}
 	
 	public static int[] serverMoveToNative(String e) {
+		e=e.replace("Black:", "");
+		e=e.replace("White:", "");
+		e=e.replace("Move:","");
+		
 		//uses hashmap stnTranslation to convert server strings to our int representation
 		String[] moves = e.split(":\\(");
 		int[] move = new int[moves.length];
+		int firstPosition = stnTranslation.get(moves[0]);//(3:1):(5:3)
+		int secondPosition = stnTranslation.get("("+moves[1]);
+		if(firstPosition-secondPosition ==-8 ||firstPosition-secondPosition ==8||firstPosition-secondPosition ==10||firstPosition-secondPosition ==-10)
+			{
+				move = new int[18];
+				move[0] = stnTranslation.get(moves[0]);
+				for(int i = 1 ;i <moves.length;i++)
+					{
+					move[i*2] = stnTranslation.get("("+moves[i]);
+					move[i*2-1] = (int) (0.5*(move[i*2]+move[i*2-2]));
+					}
+				return move;
+					
+			}
+		
 		move[0]=stnTranslation.get(moves[0]);
-		//we split by ":(" so need to reinsert "(" for our translation function
-		for(int i = 1 ;i <moves.length;i++)
-			move[i] = stnTranslation.get("("+moves[i]);	
+		move[1] = stnTranslation.get("("+moves[1]);	
+		
+		
+		
+		
 		return move;
 	}
 	
@@ -201,5 +234,30 @@ public class Translate {
 			
 		}
 	
+	
+	public static void printLegalMoves(int[][] legalMoves)
+		{
+			int i = 0;
+			while(legalMoves[i]!=null)
+    			{
+    				
+    				if(legalMoves[i].length==2)
+    					{
+    						System.out.println(legalMoves[i][0] + "->"+ legalMoves[i][1]);
+    					}
+    				else
+    					{
+    						int j = 0; 
+    						while(legalMoves[i][j]!=0)
+    							{
+    								System.out.print(" "+legalMoves[i][j]);
+    								j++;
+    							}
+    						System.out.println("");
+    					}
+    				
+    				i++;
+    			}
+		}
 	
 }

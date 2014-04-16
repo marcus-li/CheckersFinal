@@ -7,7 +7,7 @@ import java.net.*;
 import java.util.Scanner;
 
 
-public class CheckersClient {
+public class WorkingClientNotForTesting {
 
     private String _user = "5";
     private String _password = "238056";  
@@ -24,8 +24,14 @@ public class CheckersClient {
 	
 	private int[] _pieces = new int[36];//black -1,-2 white +1, +2 (2 are kings)
 	
+	   //initiate new client
+//		public static void main(String[] args){
+//			Translate.initialize();//initialize our translation function
+//			//new CheckersClient();	
+//			new InternalServer();
+//			}
   
-    public CheckersClient(double[] weights){ 	
+    public WorkingClientNotForTesting(double[] weights){ 	
     		_pieces = new int[]{0,-1,-1,-1,-1,-1,-1,-1,-1,0,-1,-1,-1,-1,0,0,0,0,0,0,0,0,0,1,1,1,1,0,1,1,1,1,1,1,1,1};
     		_GUI = new CheckersFrame();
     		_GUI.updatePieces(_pieces);
@@ -118,7 +124,15 @@ public class CheckersClient {
 			
 		}
     
+    
+
+
+ 
 	
+	
+	
+		
+			
 		
 
 	//read a message from the server and return it as a string
