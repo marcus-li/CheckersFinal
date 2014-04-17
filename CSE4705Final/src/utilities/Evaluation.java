@@ -8,6 +8,9 @@ public class Evaluation
 		private long whitesCloseToKingMask = 0b000000000000000000000000000111111111L;
 		private long blackAdvancement =  0b000000000000111111110000000000000000L;
 		private long whiteAdvancement =  0b000000000000000000001111111100000000L;
+		private long blackOreoMask = 0b000000000000000000000000000001000110L;
+		private long whiteOreoMask = 0b011000100000000000000000000000000000L;
+		
 		public Evaluation(double[] weights){
 			_weights = weights;
 		}
@@ -33,6 +36,12 @@ public class Evaluation
 				
 				int blacksAdvancement = Long.bitCount(blackRegularPieces&blackAdvancement) - 
 										Long.bitCount(blackRegularPieces&whiteAdvancement);
+				
+				int blackOreo = 0;
+				if((blackRegularPieces & blackOreoMask) == blackOreoMask){
+					blackOreo = 1; 
+				}
+				
 				//raw score kings and pieces
 				int pieceValue = Long.bitCount(blacks)-Long.bitCount(whites);
 				//a bonus for having kings
@@ -40,7 +49,7 @@ public class Evaluation
 			
 				
 				return _weights[0]*pieceValue+_weights[1]*kingValue+_weights[2]*blacksCloseToKings+_weights[3]*borderCount+
-						_weights[4]*blacksAdvancement;
+						_weights[4]*blacksAdvancement + _weights[5]*blackOreo;
 				
 			}
 
@@ -62,11 +71,17 @@ public class Evaluation
 					int whitesAdvancement = Long.bitCount(whiteRegularPieces&whiteAdvancement)
 						-Long.bitCount(whiteRegularPieces&blackAdvancement);
 					
+
+					int whiteOreo = 0;
+					if((whiteRegularPieces & whiteOreoMask) == whiteOreoMask){
+						whiteOreo = 1; 
+					}
+					
 					int pieceValue = Long.bitCount(whites)-Long.bitCount(blacks);
 					int kingValue = Long.bitCount(whites&kings)-Long.bitCount(blacks&kings);
 					
 					return _weights[0]*pieceValue+_weights[1]*kingValue+_weights[2]*whitesCloseToKing+_weights[3]*borderCount+
-							_weights[4]*whitesAdvancement;
+							_weights[4]*whitesAdvancement+ _weights[5]*whiteOreo;
 					
 				}
 
