@@ -10,7 +10,7 @@ public class MiniMax
 		//private static CheckersFrame maxStuckFrame= new CheckersFrame();
 		
 		//returns the best move based on 
-		private static int _searchDepth = 6;
+		private static int _searchDepth = 10;
 		private static Evaluation _eFunction;
 		private static int _player;
 		private static double _globalMax = -99999999;
@@ -33,18 +33,20 @@ public class MiniMax
 				//maximize the values that Min could possibly choose, initialize this to be the first action
 					int[] bestMove = null;
 					int inc = 0;
-					double bestValue=-9000000;
+					double alphaMax=-9000000;
 					while(validMoves[inc]!=null)
 						{
 							//we want to maximize the value of the next state
 							//whose value is the minimum of it's successors states
 							int[] nextState = MoveGenerator.result(_player , validMoves[inc], gameState);
 							double nextValue = minValue(nextState,0,_globalMax,_globalMin);
-							if(nextValue>bestValue)
+							if(nextValue>alphaMax)
 								{
-								bestValue = nextValue;
+								alphaMax = nextValue;
 								bestMove = validMoves[inc];
 								}	
+							
+							
 							inc++;
 						}
 					
@@ -75,7 +77,7 @@ public class MiniMax
 			
 			//TODO further pruning to decide whether it is worth looking exploring deeper nodes
 			
-			double min =  10000000;
+			
 			int inc = 0;
 			while(validMoves[inc]!=null)
 				{
@@ -83,14 +85,16 @@ public class MiniMax
 					int[] nextState = MoveGenerator.result(-_player , validMoves[inc], currentState);
 					//value of next move
 					double value = maxValue(nextState,searchDepth+1,alphaMax, betaMin);//find the value of this state recursively
-					if(value<min)//decrease max's returns
-							min = value;
-					inc++;
 					
+					if(value<betaMin)
+						betaMin = value;
+					if(betaMin<=alphaMax)//the maximizer one call up would never choose this option
+						return betaMin;
+					inc++;
 				}
 		
 			
-			return min;
+			return betaMin;
 		}
 		
 		
@@ -108,7 +112,7 @@ public class MiniMax
 					if(validMoves[0]==null) return -10000;//if we can't move this is bad and we don't want to end up here	
 					
 					//TODO we can define more pruning rules to determine whether we should continue searching
-					double max =  -1000000;
+					
 					int inc = 0;
 					//for each child node
 					while(validMoves[inc]!=null)
@@ -116,14 +120,12 @@ public class MiniMax
 							//recursively find the best value
 							int[] nextState = MoveGenerator.result(_player , validMoves[inc], state);
 							double value = minValue(nextState,searchDepth+1,alphaMax,betaMin);
-							if(value>max)//if we have done better then update our return value
-									max = value;
-							if(max>_globalMax)
-								_globalMax = max;
-							if(_globalMax>_globalMin)
-								return _globalMax;
+							if(value>alphaMax)//if we have done better then update our return value
+									alphaMax = value;
+							if(alphaMax>=betaMin)//the minimizer one call up would never let this happen
+								return alphaMax;//so we return alpha
 							inc++;
 						}
-				return max;
+				return alphaMax;
 			}	
 	}

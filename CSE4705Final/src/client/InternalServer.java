@@ -134,11 +134,14 @@ public class InternalServer
 						
 						playerMove(sc.nextLine());
 						_GUI.updatePieces(_pieces);
+						Testing.start();
 						if(computerMove(comp)==-1)
 							{
+								Testing.endAndReport();
 							System.out.println("player wins");
 							break;
 							}
+						Testing.endAndReport();
 						_GUI.updatePieces(_pieces);
 					}
 				
