@@ -39,9 +39,9 @@ public class InternalServer
 			{
 				//after about 80 moves we should switch algorithms
 				//double[] alphaWeights = new double[] {10,10,2,2};//alpha computer weights
-				double[] alphaWeights = new double[]{4,2,1,0.8};//alpha computer weights
+				double[] alphaWeights = new double[]{4,2,1,0.8,0.25};//alpha computer weights
 				//assume betaWeights is our current best guess at a winning algorithm.
-				double[] betaWeights = new double[] {4,2,1,0.3} ;//beta computer weights
+				double[] betaWeights = new double[] {4,2,1,0.3,0.25} ;//beta computer weights
 				
 				System.out.println("choose mode:\nPlayer vs Comp :pvc\nComp vs Server: cvs\nComp vs. Comp: cvc");
 				String mode = sc.nextLine();

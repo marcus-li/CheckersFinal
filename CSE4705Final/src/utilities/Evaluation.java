@@ -6,6 +6,8 @@ public class Evaluation
 		private long borderMask = 0b111111000000011000000011000000011111L;
 		private long blacksCloseToKingMask = 0b111111111111000000000000000000000000L;
 		private long whitesCloseToKingMask = 0b000000000000000000000000000111111111L;
+		private long blackAdvancement =  0b000000000000111111110000000000000000L;
+		private long whiteAdvancement =  0b000000000000000000001111111100000000L;
 		public Evaluation(double[] weights){
 			_weights = weights;
 		}
@@ -29,37 +31,44 @@ public class Evaluation
 				
 				int blacksCloseToKings = Long.bitCount(blackRegularPieces&blacksCloseToKingMask);
 				
+				int blacksAdvancement = Long.bitCount(blackRegularPieces&blackAdvancement) - 
+										Long.bitCount(blackRegularPieces&whiteAdvancement);
 				//raw score kings and pieces
 				int pieceValue = Long.bitCount(blacks)-Long.bitCount(whites);
 				//a bonus for having kings
 				int kingValue = Long.bitCount(blacks&kings)-Long.bitCount(whites&kings);
 			
 				
-				return _weights[0]*pieceValue+_weights[1]*kingValue+_weights[2]*blacksCloseToKings+_weights[3]*borderCount;
+				return _weights[0]*pieceValue+_weights[1]*kingValue+_weights[2]*blacksCloseToKings+_weights[3]*borderCount+
+						_weights[4]*blacksAdvancement;
 				
 			}
 
 	
 
-				//assuming white
-				public double evaluateWhite(int[] pieces)
-					{
-						long[] pieces2 = Translate.arrayToBitMapping(pieces);
-						long blacks = pieces2[0];
-						long whites = pieces2[1];
-						long kings = pieces2[2];
-						int borderCount  = Long.bitCount(borderMask&whites);
-						//desireable for non-king pieces to try and become kings, so black pieces in second to last row good
-						long whiteRegularPieces = whites^(whites&kings);
-						
-						int whitesCloseToKing = Long.bitCount(whiteRegularPieces&whitesCloseToKingMask);
-						
-						int pieceValue = Long.bitCount(whites)-Long.bitCount(blacks);
-						int kingValue = Long.bitCount(whites&kings)-Long.bitCount(blacks&kings);
-						
-						return _weights[0]*pieceValue+_weights[1]*kingValue+_weights[2]*whitesCloseToKing+_weights[3]*borderCount;
-						
-					}
+			//assuming white
+			public double evaluateWhite(int[] pieces)
+				{
+					long[] pieces2 = Translate.arrayToBitMapping(pieces);
+					long blacks = pieces2[0];
+					long whites = pieces2[1];
+					long kings = pieces2[2];
+					int borderCount  = Long.bitCount(borderMask&whites);
+					//desireable for non-king pieces to try and become kings, so black pieces in second to last row good
+					long whiteRegularPieces = whites^(whites&kings);
+					
+					int whitesCloseToKing = Long.bitCount(whiteRegularPieces&whitesCloseToKingMask);
+					
+					int whitesAdvancement = Long.bitCount(whiteRegularPieces&whiteAdvancement)
+						-Long.bitCount(whiteRegularPieces&blackAdvancement);
+					
+					int pieceValue = Long.bitCount(whites)-Long.bitCount(blacks);
+					int kingValue = Long.bitCount(whites&kings)-Long.bitCount(blacks&kings);
+					
+					return _weights[0]*pieceValue+_weights[1]*kingValue+_weights[2]*whitesCloseToKing+_weights[3]*borderCount+
+							_weights[4]*whitesAdvancement;
+					
+				}
 
 	
 
